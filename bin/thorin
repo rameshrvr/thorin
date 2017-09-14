@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require 'thorin'
+require 'yaml'
+require 'optparse'
+
+# Get commandline options
+# print help if no args given
+ARGV << '-h' if ARGV.empty?
+# Variable to store command line options
+options = {}
+OptionParser.new do |opts|
+  opts.banner = 'Usage: thorin [options] <file>'
+  opts.on('-i', '--ignore', 'Ignore parsing') do
+    options[:ignore] = true
+  end
+  opts.on_tail('-h', '--help', 'Show this message') do
+    puts 'This tool is used to validate yaml files'
+    puts opts
+    exit
+  end
+end.parse!
+
+# Message denotes the operation is started
+puts "Checking YAML...\n"
+
+ARGV.each do |single_yaml|
+  object = Thorin::Shield.new(single_yaml, options)
+  # Check weather the file exists or not.
+  syntax_check = object.syntax_check
+  puts "Syntax OK, File: #{single_yaml}" if syntax_check
+end
+
+# Completion message
+puts "\nCompleted checking!"
