@@ -28,11 +28,11 @@ ARGV.each do |single_yaml|
   object = Thorin::Shield.new(single_yaml, options)
   # Check weather the file exists or not.
   syntax_check = object.syntax_check
-  # Stop further execution if syntax fails
-  break unless syntax_check
+  # Stop further execution for the file if syntax fails
+  next unless syntax_check
   # Execute super user related verifications
-  object.verify_username
-  puts "Syntax OK, File: #{single_yaml}" if syntax_check
+  username_check = object.verify_username
+  puts "\nSyntax OK, File: #{single_yaml}" if syntax_check && username_check
 end
 
 # Completion message

@@ -19,37 +19,42 @@ module Thorin
 
     # Method to check the basic syntax of the file
     def syntax_check
+      # Raise if the file has a basic syntax errors
       raise 'File doesnot exists!!! Please check the path' unless File.exist? @file
       raise 'Seems the extension is not .yaml !!! Please pass valid yaml file' unless File.extname(@file).eql?('.yaml')
+      # Initialize object for logger
       @logger = Logger.new(STDOUT)
-      @logger.level = Logger::WARN
       begin
         YAML.load_file(@file)
       rescue => err
+        # Log the rescued error message
         @logger.error('Error: '.red + err.to_s.yellow)
         return false
       end
       true
     end
 
-    # Recrusive method to check weather the YAML has username 'superairlockdevtest' or not
-    # It will iterate all nested hashes and check for the entry
-    #
-    # @param data [Hash] Hash needs to be iterated
-    #
-    # @return [Boolean] True if it found one, none otherwise
-    def check_username(data:)
-      data.each do |key, value|
-        return true if value.has_value?('superairlockdevtest')
-      end
-    end
-
     # Check the presence of 'superairlockdevtest' in YAML data and log error
     def verify_username
+      # Load yaml
       load_yaml
-      if check_username(data: @data)
-        @logger.error('Error: '.red + "'superairlockdevtest' should not exist in YAML".yellow)
+      begin
+        # Since it is a hash we need to do this initial check
+        raise if @data.value?('superairlockdevtest')
+        @data.each do |_key, value|
+          # If the value is an array, search each array for the
+          # presence of 'superairlockdevtest'
+          if value.is_a?(Array)
+            value.map { |x| raise if x.value?('superairlockdevtest') }
+            next
+          end
+          raise if value.value?('superairlockdevtest')
+        end
+      rescue
+        @logger.error('Error: '.red + "Usage of 'superairlockdevtest' in YAML is deprecated".yellow)
+        return false
       end
+      true
     end
   end
 end
