@@ -12,6 +12,11 @@ module Thorin
       @config = config
     end
 
+    # Method to load YAML into a variable
+    def load_yaml
+      @data = YAML.load_file(@file)
+    end
+
     # Method to check the basic syntax of the file
     def syntax_check
       raise 'File doesnot exists!!! Please check the path' unless File.exist? @file
@@ -21,14 +26,30 @@ module Thorin
       begin
         YAML.load_file(@file)
       rescue => err
-        logger.error('Error: '.red + err.yellow)
+        @logger.error('Error: '.red + err.to_s.yellow)
         return false
       end
       true
     end
 
-    # Method to check weather the YAML has username 'superairlockdevtest' or not
-    def check_username
+    # Recrusive method to check weather the YAML has username 'superairlockdevtest' or not
+    # It will iterate all nested hashes and check for the entry
+    #
+    # @param data [Hash] Hash needs to be iterated
+    #
+    # @return [Boolean] True if it found one, none otherwise
+    def check_username(data:)
+      data.each do |key, value|
+        return true if value.has_value?('superairlockdevtest')
+      end
+    end
+
+    # Check the presence of 'superairlockdevtest' in YAML data and log error
+    def verify_username
+      load_yaml
+      if check_username(data: @data)
+        @logger.error('Error: '.red + "'superairlockdevtest' should not exist in YAML".yellow)
+      end
     end
   end
 end

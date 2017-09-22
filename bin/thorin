@@ -22,12 +22,16 @@ OptionParser.new do |opts|
 end.parse!
 
 # Message denotes the operation is started
-puts "Checking YAML...\n"
+puts "Checking YAML...\n\n"
 
 ARGV.each do |single_yaml|
   object = Thorin::Shield.new(single_yaml, options)
   # Check weather the file exists or not.
   syntax_check = object.syntax_check
+  # Stop further execution if syntax fails
+  break unless syntax_check
+  # Execute super user related verifications
+  object.verify_username
   puts "Syntax OK, File: #{single_yaml}" if syntax_check
 end
 
