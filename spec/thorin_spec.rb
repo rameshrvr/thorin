@@ -11,17 +11,17 @@ RSpec.describe 'Thorin:' do
   end
 
   describe 'Validate Syntax checks: ' do
-    it 'Syntax check should PASS for Good YAML file' do
+    it 'Syntax check should PASS for Good YAML file'.green do
       obj = Thorin::Shield.new(SYNTAX_CHECK_PATH + 'Test1.yaml', {})
       expect(obj.syntax_check).to eq true
     end
 
-    it 'Syntax check should FAIL for Bad YAML file' do
+    it 'Syntax check should FAIL for Bad YAML file'.green do
       obj = Thorin::Shield.new(SYNTAX_CHECK_PATH + 'Test2.yaml', {})
       expect(obj.syntax_check).to eq false
     end
 
-    it 'Syntax check on non-existing file' do
+    it 'Syntax check on non-existing file'.green do
       obj = Thorin::Shield.new(SYNTAX_CHECK_PATH + 'Something.yaml', {})
       res = false
       # Catch the exception and compare it with the message
@@ -34,7 +34,7 @@ RSpec.describe 'Thorin:' do
       expect(res).to eq true
     end
 
-    it 'Syntax check on extension of the file' do
+    it 'Syntax check on extension of the file'.green do
       obj = Thorin::Shield.new(SYNTAX_CHECK_PATH + 'Test3.yal', {})
       res = false
       begin
@@ -49,13 +49,24 @@ RSpec.describe 'Thorin:' do
 
   # Verificaion related to username stuffs
   describe 'Validate Username checks: ' do
-    it 'username check in Hash of Hash structure' do
+    it 'username check in Hash of Hash structure'.green do
       obj = Thorin::Shield.new(USERNAME_CHECK_PATH + 'Test1.yaml', {})
       expect(obj.verify_username).to eq false
     end
-  end
 
-  it 'does something useful' do
-    expect(false).to eq(true)
+    it 'username check in Hash of Array structure'.green do
+      obj = Thorin::Shield.new(USERNAME_CHECK_PATH + 'Test2.yaml', {})
+      expect(obj.verify_username).to eq false
+    end
+
+    it 'username check in Hash structure'.green do
+      obj = Thorin::Shield.new(USERNAME_CHECK_PATH + 'Test3.yaml', {})
+      expect(obj.verify_username).to eq false
+    end
+
+    it 'username check should pass for a perfect YAML'.green do
+      obj = Thorin::Shield.new(USERNAME_CHECK_PATH + 'Test4.yaml', {})
+      expect(obj.verify_username).to eq true
+    end
   end
 end
