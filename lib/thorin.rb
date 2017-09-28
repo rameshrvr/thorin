@@ -41,16 +41,16 @@ module Thorin
       begin
         # Since it is a hash we need to do this initial check
         raise if @data.value?('superairlockdevtest')
-        @data.each do |_key, value|
+        @data.each_value do |value|
           # If the value is an array, search each array for the
           # presence of 'superairlockdevtest'
           if value.is_a?(Array)
-            value.map { |x| raise if x.value?('superairlockdevtest') }
+            value.map { |x| raise if x.value?('superairlockdevtest') } if value.is_a?(Hash)
             next
           end
-          raise if value.value?('superairlockdevtest')
+          raise if value.is_a?(Hash) && value.value?('superairlockdevtest')
         end
-      rescue
+      rescue RuntimeError
         @logger.error('Error: '.red + "Usage of 'superairlockdevtest' in YAML is deprecated".yellow)
         return false
       end

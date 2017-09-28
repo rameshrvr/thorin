@@ -1,0 +1,10 @@
+---
+:test1:
+  :key1: value1
+     :key2: value2
+
+:test2:
+  - array0
+  - array1
+
+:test3: test

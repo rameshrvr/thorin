@@ -1,0 +1,6 @@
+BlockLength:
+  Max: 100
+
+# 80 characters was deemed too restrictive and negatively affecting code quality
+Metrics/LineLength:
+  Max: 120
