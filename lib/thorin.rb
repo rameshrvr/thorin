@@ -45,7 +45,7 @@ module Thorin
           # If the value is an array, search each array for the
           # presence of 'superairlockdevtest'
           if value.is_a?(Array)
-            value.map { |x| raise if x.value?('superairlockdevtest') } if value.is_a?(Hash)
+            value.map { |x| raise if x.value?('superairlockdevtest') && x.is_a?(Hash) }
             next
           end
           raise if value.is_a?(Hash) && value.value?('superairlockdevtest')
