@@ -10,6 +10,8 @@ module Thorin
     def initialize(file, config)
       @file = file
       @config = config
+      # Initialize object for logger
+      @logger = Logger.new(STDOUT)
     end
 
     # Method to load YAML into a variable
@@ -22,8 +24,6 @@ module Thorin
       # Raise if the file has a basic syntax errors
       raise 'File doesnot exists!!! Please check the path' unless File.exist? @file
       raise 'Seems the extension is not .yaml !!! Please pass valid yaml file' unless File.extname(@file).eql?('.yaml')
-      # Initialize object for logger
-      @logger = Logger.new(STDOUT)
       begin
         YAML.load_file(@file)
       rescue => err
