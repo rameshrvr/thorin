@@ -32,7 +32,7 @@ ARGV.each do |single_yaml|
   next unless syntax_check
   # Execute super user related verifications
   username_check = object.verify_username
-  puts "\nSyntax OK, File: #{single_yaml}" if syntax_check && username_check
+  puts "\nSyntax OK, File: #{single_yaml}".green if syntax_check && username_check
 end
 
 # Completion message
