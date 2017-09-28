@@ -51,7 +51,6 @@ RSpec.describe 'Thorin:' do
   describe 'Validate Username checks: ' do
     it 'username check in Hash of Hash structure' do
       obj = Thorin::Shield.new(USERNAME_CHECK_PATH + 'Test1.yaml', {})
-      obj.syntax_check
       expect(obj.verify_username).to eq false
     end
   end
