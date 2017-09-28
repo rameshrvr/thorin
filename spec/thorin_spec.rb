@@ -2,26 +2,27 @@ require 'spec_helper'
 require 'yaml'
 
 # Initialize file path for test yaml files
-TEST_YAML_PATH = File.dirname(__FILE__) + '/helper/'
+SYNTAX_CHECK_PATH = File.dirname(__FILE__) + '/syntax_check/'
+USERNAME_CHECK_PATH = File.dirname(__FILE__) + '/verify_username/'
 
 RSpec.describe 'Thorin:' do
-  it 'has a version number' do
+  it 'Verification on version number' do
     expect(Thorin::VERSION).to eq '0.1.0'
   end
 
   describe 'Validate Syntax checks: ' do
     it 'Syntax check should PASS for Good YAML file' do
-      obj = Thorin::Shield.new(TEST_YAML_PATH + 'Test1.yaml', {})
+      obj = Thorin::Shield.new(SYNTAX_CHECK_PATH + 'Test1.yaml', {})
       expect(obj.syntax_check).to eq true
     end
 
     it 'Syntax check should FAIL for Bad YAML file' do
-      obj = Thorin::Shield.new(TEST_YAML_PATH + 'Test2.yaml', {})
+      obj = Thorin::Shield.new(SYNTAX_CHECK_PATH + 'Test2.yaml', {})
       expect(obj.syntax_check).to eq false
     end
 
     it 'Syntax check on non-existing file' do
-      obj = Thorin::Shield.new(TEST_YAML_PATH + 'Something.yaml', {})
+      obj = Thorin::Shield.new(SYNTAX_CHECK_PATH + 'Something.yaml', {})
       res = false
       # Catch the exception and compare it with the message
       begin
@@ -34,7 +35,7 @@ RSpec.describe 'Thorin:' do
     end
 
     it 'Syntax check on extension of the file' do
-      obj = Thorin::Shield.new(TEST_YAML_PATH + 'Test3.yal', {})
+      obj = Thorin::Shield.new(SYNTAX_CHECK_PATH + 'Test3.yal', {})
       res = false
       begin
         obj.syntax_check
